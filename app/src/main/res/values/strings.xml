@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">StickyNotes</string>
+    <string name="title_activity_view_note">ViewNote</string>
+</resources>

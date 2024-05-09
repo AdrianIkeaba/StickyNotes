@@ -1,0 +1,464 @@
+{
+  "name": "home_screen_empty",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "Q2qsQYsR92hFaEpblhwuZU",
+    "node": "277:66",
+    "version": "5716907515",
+    "component-id": "d581b860ad52738d0c477aeefbd485a893d6ba22"
+  },
+  "default": "Home Screen Empty",
+  "documentation": "empty notes screen\n",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "text",
+        "id": "Create your first note !"
+      },
+      {
+        "type": "image",
+        "id": "https://storyset.com/illustration/notebook/rafiki"
+      },
+      {
+        "type": "text",
+        "id": "Hero Text"
+      },
+      {
+        "type": "vector",
+        "id": "Button 1"
+      },
+      {
+        "type": "group",
+        "id": "info_outline"
+      },
+      {
+        "type": "vector",
+        "id": "Button 4"
+      },
+      {
+        "type": "group",
+        "id": "search"
+      },
+      {
+        "type": "vector",
+        "id": "Ellipse 1"
+      },
+      {
+        "type": "group",
+        "id": "add"
+      },
+      {
+        "type": "group",
+        "id": "Group"
+      },
+      {
+        "type": "vector",
+        "id": "Vector"
+      },
+      {
+        "type": "vector",
+        "id": "Vector1"
+      },
+      {
+        "type": "vector",
+        "id": "Vector2"
+      },
+      {
+        "type": "vector",
+        "id": "Vector3"
+      },
+      {
+        "type": "vector",
+        "id": "Vector4"
+      },
+      {
+        "type": "vector",
+        "id": "Vector5"
+      }
+    ],
+    "modes": {
+      "Home Screen Empty": {
+        "rules": [
+          {
+            "id": "top_level",
+            "border-radius": 30.0,
+            "is-structured": false,
+            "children": [
+              "Create your first note !",
+              "https://storyset.com/illustration/notebook/rafiki",
+              "Hero Text",
+              "Button 1",
+              "info_outline",
+              "Button 4",
+              "search",
+              "Ellipse 1",
+              "add"
+            ],
+            "background-color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 0.1450980392156863
+            },
+            "clip-content": false
+          },
+          {
+            "id": "Create your first note !",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": 109.0
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": 576.0
+              }
+            },
+            "font-weight": 300.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "Create your first note !",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": 20.0,
+            "line-height": 1.3639999389648438,
+            "typeface": "Nunito"
+          },
+          {
+            "id": "https://storyset.com/illustration/notebook/rafiki",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": 32.0
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": 283.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 350.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 286.73077392578125
+              }
+            },
+            "image-content": "https_storyset_com_illustration_notebook_rafiki.png",
+            "scale": "fill"
+          },
+          {
+            "id": "Hero Text",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": 24.0
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": 47.0
+              }
+            },
+            "font-weight": 600.0,
+            "color": {
+              "alpha": 1.0,
+              "hue": 0.0,
+              "saturation": 0.0,
+              "value": 1.0
+            },
+            "text-content": "Notes",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": 43.0,
+            "line-height": 1.363999921222066,
+            "typeface": "Nunito"
+          },
+          {
+            "id": "Button 1",
+            "border-radius": 15.0,
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": 339.0
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": 51.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 50.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 50.0
+              }
+            },
+            "vector-content": "button_1.svg"
+          },
+          {
+            "id": "info_outline",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": 352.0
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": 64.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 24.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 24.0
+              }
+            },
+            "is-structured": false,
+            "children": [
+              "Group"
+            ]
+          },
+          {
+            "id": "Button 4",
+            "border-radius": 15.0,
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": 268.0
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": 51.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 50.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 50.0
+              }
+            },
+            "vector-content": "button_4.svg"
+          },
+          {
+            "id": "search",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": 281.0
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": 64.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 24.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 24.0
+              }
+            },
+            "is-structured": false,
+            "children": [
+              "Vector2",
+              "Vector3"
+            ]
+          },
+          {
+            "id": "Ellipse 1",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": 294.0
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": 767.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 70.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 70.0
+              }
+            },
+            "vector-content": "ellipse_1.svg"
+          },
+          {
+            "id": "add",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": 320.0
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": 788.0
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": 48.0
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": 48.0
+              }
+            },
+            "is-structured": false,
+            "children": [
+              "Vector4",
+              "Vector5"
+            ]
+          },
+          {
+            "id": "Group",
+            "is-structured": false,
+            "children": [
+              "Vector",
+              "Vector1"
+            ],
+            "clip-content": false
+          },
+          {
+            "id": "Vector",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            }
+          },
+          {
+            "id": "Vector1",
+            "margin": {
+              "left": 2.0,
+              "top": 2.0,
+              "right": 1.9999980926513672,
+              "bottom": 2.0
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            },
+            "vector-content": "vector.svg"
+          },
+          {
+            "id": "Vector2",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            }
+          },
+          {
+            "id": "Vector3",
+            "margin": {
+              "left": 2.9993896484375,
+              "top": 2.9993896484375,
+              "right": 3.952482223510742,
+              "bottom": 3.942485809326172
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            },
+            "vector-content": "vector1.svg"
+          },
+          {
+            "id": "Vector4",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            }
+          },
+          {
+            "id": "Vector5",
+            "margin": 10.0,
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            },
+            "vector-content": "vector2.svg"
+          }
+        ]
+      }
+    }
+  },
+  "previews": [
+    {
+      "design": "Home Screen Empty",
+      "size": {
+        "width": 414.0,
+        "height": 896.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
