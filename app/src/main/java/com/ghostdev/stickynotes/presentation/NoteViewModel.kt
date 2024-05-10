@@ -2,6 +2,7 @@ package com.ghostdev.stickynotes.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ghostdev.stickynotes.model.Note
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,8 +12,8 @@ import kotlinx.coroutines.launch
 class NoteViewModel(private val notesRepository: NotesRepository): ViewModel() {
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
     val notes: StateFlow<List<Note>> = _notes
-    private val _note = MutableStateFlow<Note?>(null)
-    val note: StateFlow<Note?> = _note
+    private val _note = MutableStateFlow<List<Note>>(emptyList())
+    val note: StateFlow<List<Note>> = _note
 
 
     fun createNote(note: Note) {
@@ -35,16 +36,16 @@ class NoteViewModel(private val notesRepository: NotesRepository): ViewModel() {
         }
     }
 
-    fun getNoteById(id: Int) {
+
+    fun fetchNotes() {
         viewModelScope.launch {
-            _note.value = notesRepository.getNotesById(id)
+            _notes.value = notesRepository.getAllNotes()
         }
     }
 
-
-    private fun fetchNotes() {
+    fun searchNote(search: String) {
         viewModelScope.launch {
-            _notes.value = notesRepository.getAllNotes()
+            _note.value = notesRepository.searchNotes(search)
         }
     }
 

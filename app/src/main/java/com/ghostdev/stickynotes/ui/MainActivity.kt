@@ -1,5 +1,6 @@
 package com.ghostdev.stickynotes.ui
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -44,12 +45,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.ghostdev.stickynotes.R
 import com.ghostdev.stickynotes.database.NotesDB
-import com.ghostdev.stickynotes.model.Note
 import com.ghostdev.stickynotes.nav.Destinations
 import com.ghostdev.stickynotes.nav.NavGraph
 import com.ghostdev.stickynotes.presentation.NoteViewModel
@@ -59,6 +56,10 @@ import com.ghostdev.stickynotes.theme.nunitoFont
 import com.ghostdev.stickynotes.theme.primary
 
 class MainActivity : ComponentActivity() {
+    private lateinit var context: Context
+    private lateinit var db: NotesDB
+    private lateinit var repository: NotesRepository
+    private lateinit var viewModel: NoteViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -67,10 +68,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = primary) {
                     //MainUI
-                    val context = LocalContext.current.applicationContext
-                    val db = NotesDB.getInstance(context)
-                    val repository = NotesRepository(db)
-                    val viewModel = NoteViewModel(repository)
+                    context = LocalContext.current.applicationContext
+                    db = NotesDB.getInstance(context)
+                    repository = NotesRepository(db)
+                    viewModel = NoteViewModel(repository)
 
                     NavGraph(viewModel)
                 }
@@ -162,23 +163,23 @@ fun NoteCard(id: Int, title: String, body: String, visibility: Boolean, color: I
     Spacer(modifier = Modifier.size(8.dp))
     Card(modifier = Modifier.clickable { controller.navigate("${Destinations.ViewNotes}/$id/$title/$body/$color/$visibility")}
         .fillMaxWidth(1f)
-        .heightIn(min = 100.dp, max = 300.dp),
+        .heightIn(min = 100.dp, max = 250.dp),
         shape = RoundedCornerShape(15.dp), colors = CardDefaults.cardColors(
-            containerColor = (Color.Cyan))
+            containerColor = Color(color))
     ) {
         Box(modifier = Modifier.wrapContentSize()) {
             Column {
                 Text(text = title,
-                    color = Color.Black, fontSize = 30.sp,
+                    color = Color.White, fontSize = 28.sp,
                     fontFamily = nunitoFont,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(start = 10.dp, top = 10.dp))
 
                 Text(text = body,
-                    color = Color.Black, fontSize = 18.sp,
+                    color = Color.White, fontSize = 18.sp,
                     fontFamily = nunitoFont,
                     fontWeight = FontWeight.Normal,
-                    modifier = Modifier.padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 10.dp)
+                    modifier = Modifier.padding(start = 10.dp, top = 5.dp, bottom = 5.dp, end = 10.dp)
                 )
             }
         }

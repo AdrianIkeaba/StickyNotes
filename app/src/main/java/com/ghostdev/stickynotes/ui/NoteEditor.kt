@@ -1,9 +1,12 @@
 package com.ghostdev.stickynotes.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,11 +28,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -44,14 +51,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.ghostdev.stickynotes.R
 import com.ghostdev.stickynotes.database.NotesDB
+import com.ghostdev.stickynotes.model.Note
+import com.ghostdev.stickynotes.nav.Destinations
 import com.ghostdev.stickynotes.nav.NavGraph
 import com.ghostdev.stickynotes.presentation.NoteViewModel
 import com.ghostdev.stickynotes.presentation.NotesRepository
 import com.ghostdev.stickynotes.theme.StickyNotesTheme
 import com.ghostdev.stickynotes.theme.nunitoFont
+import com.ghostdev.stickynotes.theme.secondary
+import com.ghostdev.stickynotes.theme.secondary2
+import com.ghostdev.stickynotes.theme.tertiary
 
 class NoteEditor : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +88,15 @@ class NoteEditor : ComponentActivity() {
 
 @Composable
 fun NoteEditorUI(viewModel: NoteViewModel, controller: NavController, noteId: Int?, noteTitle: String?, noteBody: String?, noteColor: Int?, noteVisibility: Boolean?) {
+   val context = LocalContext.current.applicationContext
+    var showDialog by remember { mutableStateOf(false) }
+    val noteExists by remember {
+        if (noteTitle != null) {
+            mutableStateOf(true)
+        } else {
+            mutableStateOf(false)
+        }
+    }
     var titleText by remember {
         if (noteTitle != null) {
             mutableStateOf(noteTitle)
@@ -103,7 +125,7 @@ fun NoteEditorUI(viewModel: NoteViewModel, controller: NavController, noteId: In
                     containerColor = Color(0xFF3B3B3B),
                 )
             ) {
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box(modifier = Modifier.fillMaxSize().clickable { showDialog = true }) {
                     Icon(
                         imageVector = Icons.Outlined.KeyboardArrowLeft,
                         contentDescription = "Back",
@@ -145,7 +167,25 @@ fun NoteEditorUI(viewModel: NoteViewModel, controller: NavController, noteId: In
                         containerColor = Color(0xFF3B3B3B),
                     )
                 ) {
-                    Box(modifier = Modifier.fillMaxSize()) {
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .clickable {
+                            if (titleText.isEmpty() || bodyText.isEmpty()) {
+                                Toast.makeText(context, "You can\'t save an empty note silly", Toast.LENGTH_SHORT).show()
+                            } else {
+                                if (noteExists) {
+                                    val updatedNote = Note(noteId!!, titleText, bodyText, true, noteColor!!)
+                                    viewModel.updateNote(updatedNote)
+                                    viewModel.fetchNotes()
+                                    controller.navigate("${Destinations.Home}")
+                                } else {
+                                    val note = Note(0, titleText, bodyText, true, secondary2.toArgb())
+                                    viewModel.createNote(note)
+                                    viewModel.fetchNotes()
+                                    controller.navigate("${Destinations.Home}")
+                                }
+                            }
+                        }) {
                         Icon(
                             painter = painterResource(id = R.drawable.save),
                             contentDescription = "Save",
@@ -189,57 +229,77 @@ fun NoteEditorUI(viewModel: NoteViewModel, controller: NavController, noteId: In
             selectionColors = TextSelectionColors(backgroundColor = Color(0xFF37474F), handleColor = Color.White)
         ), textStyle = TextStyle(color = Color.White, fontSize = 18.sp))
     }
+    if (showDialog) {
+        SaveChangesDialog(onDismiss = { showDialog = false }, context, controller, viewModel, noteId, titleText, bodyText, noteColor, noteVisibility)
+    }
 }
 
 
 @Composable
-@Preview
-fun SaveChangesDialog() {
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .height(200.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF3B3B3B)
-        )) {
+fun SaveChangesDialog(onDismiss:() -> Unit, context: Context, controller: NavController, viewModel: NoteViewModel,noteId: Int?, noteTitle: String?, noteBody: String?, noteColor: Int?, noteVisibility: Boolean?) {
+    Dialog(onDismissRequest = onDismiss ) {
+        Card(modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFF3B3B3B)
+            )) {
 
-        Icon(imageVector = Icons.Filled.Info, contentDescription = "Info", modifier = Modifier
-            .align(Alignment.CenterHorizontally)
-            .padding(top = 30.dp)
-            .size(35.dp), tint = Color(0xFF9A9A9A))
-
-        Text(text = "Save changes ?",
-            modifier = Modifier
+            Icon(imageVector = Icons.Filled.Info, contentDescription = "Info", modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 10.dp),
-            fontFamily = nunitoFont, fontSize = 22.sp,
-            color = Color(0xFF9A9A9A))
+                .padding(top = 30.dp)
+                .size(35.dp), tint = Color(0xFF9A9A9A))
 
-        Row(modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly) {
+            Text(text = "Save changes ?",
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 10.dp),
+                fontFamily = nunitoFont, fontSize = 22.sp,
+                color = Color(0xFF9A9A9A))
 
-            FilledTonalButton(onClick = { },
-                modifier = Modifier.padding(top = 20.dp).width(110.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF0000)
-                ), shape = RoundedCornerShape(8.dp)) {
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly) {
+
+                FilledTonalButton(onClick = { onDismiss()
+                    controller.navigate("${Destinations.Home}") },
+                    modifier = Modifier
+                        .padding(top = 20.dp)
+                        .width(110.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFF0000)
+                    ), shape = RoundedCornerShape(8.dp)) {
                     Text(text = "Discard",
                         color = Color.White, fontFamily = nunitoFont,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold)
-            }
+                }
 
-            FilledTonalButton(onClick = { },
-                modifier = Modifier.padding(top = 20.dp).width(110.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF30BE71)
-                ), shape = RoundedCornerShape(8.dp),
-            ) {
-                Text(text = "Save",
-                    color = Color.White, fontFamily = nunitoFont,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold)
+                FilledTonalButton(
+                    onClick = {
+                        if (noteTitle!!.isEmpty()) {
+                            Toast.makeText(context, "You can\'t save an empty note silly", Toast.LENGTH_SHORT).show()
+                            onDismiss()
+                        } else {
+                            viewModel.updateNote(Note(noteId!!, noteTitle, noteBody!!, noteVisibility!!, noteColor!!))
+                            onDismiss()
+                            viewModel.fetchNotes()
+                            controller.navigate("${Destinations.Home}")
+                        }
+                    },
+                    modifier = Modifier
+                        .padding(top = 20.dp)
+                        .width(110.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF30BE71)
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                ) {
+                    Text(text = "Save",
+                        color = Color.White, fontFamily = nunitoFont,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold)
+                }
             }
         }
-
     }
 }

@@ -40,6 +40,10 @@ fun NavGraph(viewModel: NoteViewModel) {
             NoteEditorUI(viewModel = viewModel, controller = controller, noteId, noteTitle, noteBody, noteColor, noteVisibility)
         }
 
+        composable(route = "${Destinations.EditNotes}") {
+            NoteEditorUI(viewModel = viewModel, controller = controller, null, null, null, null, null)
+        }
+
         composable(route = "${Destinations.ViewNotes}/{noteId}/{noteTitle}/{noteBody}/{noteColor}/{noteVisibility}",
             arguments = listOf(
                 navArgument("noteId") {type = NavType.IntType},

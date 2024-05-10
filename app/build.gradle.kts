@@ -90,6 +90,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
     // LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.7")
+
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
     implementation("androidx.compose.animation:animation:1.6.7")
