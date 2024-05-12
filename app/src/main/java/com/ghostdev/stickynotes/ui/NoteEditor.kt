@@ -28,14 +28,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,7 +45,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -62,9 +58,7 @@ import com.ghostdev.stickynotes.presentation.NoteViewModel
 import com.ghostdev.stickynotes.presentation.NotesRepository
 import com.ghostdev.stickynotes.theme.StickyNotesTheme
 import com.ghostdev.stickynotes.theme.nunitoFont
-import com.ghostdev.stickynotes.theme.secondary
 import com.ghostdev.stickynotes.theme.secondary2
-import com.ghostdev.stickynotes.theme.tertiary
 
 class NoteEditor : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -4,7 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,18 +28,32 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.DismissState
+import androidx.compose.material3.DismissValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,6 +73,9 @@ import com.ghostdev.stickynotes.presentation.NotesRepository
 import com.ghostdev.stickynotes.theme.StickyNotesTheme
 import com.ghostdev.stickynotes.theme.nunitoFont
 import com.ghostdev.stickynotes.theme.primary
+import com.ghostdev.stickynotes.theme.secondary2
+import com.ghostdev.stickynotes.theme.tertiary
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     private lateinit var context: Context
@@ -137,8 +159,18 @@ fun MainUI(viewModel: NoteViewModel, controller: NavController) {
                 NoNotes()
             } else {
                 LazyColumn {
-                    items(notes.size) {index ->
-                        NoteCard(id = notes[index].id, title = notes[index].title, body = notes[index].body, visibility = notes[index].visible, color = notes[index].color, controller)
+                    items(notes.size, key = {it}) {index ->
+                        SwipeToDeleteContainer(
+                            item = index,
+                            onDelete = {
+                                viewModel.deleteNote(notes[it])
+                                viewModel.fetchNotes()
+                            }
+                        ) {
+                            key(it) {
+                                NoteCard(id = notes[it].id, title = notes[it].title, body = notes[it].body, visibility = notes[it].visible, color = notes[it].color, controller)
+                            }
+                        }
                     }
                 }
             }
@@ -161,7 +193,8 @@ fun MainUI(viewModel: NoteViewModel, controller: NavController) {
 @Composable
 fun NoteCard(id: Int, title: String, body: String, visibility: Boolean, color: Int, controller: NavController) {
     Spacer(modifier = Modifier.size(8.dp))
-    Card(modifier = Modifier.clickable { controller.navigate("${Destinations.ViewNotes}/$id/$title/$body/$color/$visibility")}
+    Card(modifier = Modifier
+        .clickable { controller.navigate("${Destinations.ViewNotes}/$id/$title/$body/$color/$visibility") }
         .fillMaxWidth(1f)
         .heightIn(min = 100.dp, max = 250.dp),
         shape = RoundedCornerShape(15.dp), colors = CardDefaults.cardColors(
@@ -209,5 +242,87 @@ fun NoNotes() {
                 .align(Alignment.Center)
                 .padding(top = 300.dp)
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun <T> SwipeToDeleteContainer(
+    item: T,
+    onDelete: (T) -> Unit,
+    animationDuration: Int = 500,
+    content: @Composable (T) -> Unit
+) {
+    var isRemoved by remember {
+        mutableStateOf(false)
+    }
+    val state = rememberDismissState(
+        confirmValueChange = { value ->
+            if (value == DismissValue.DismissedToStart) {
+                isRemoved = true
+                true
+            } else {
+                false
+            }
+        }
+    )
+
+    LaunchedEffect(key1 = isRemoved) {
+        if(isRemoved) {
+            delay(animationDuration.toLong())
+            onDelete(item)
+        }
+    }
+
+    AnimatedVisibility(
+        visible = !isRemoved,
+        exit = shrinkVertically(
+            animationSpec = tween(durationMillis = animationDuration),
+            shrinkTowards = Alignment.Top
+        ) + fadeOut()
+    ) {
+        SwipeToDismiss(
+            state = state,
+            background = {
+                DeleteBackground(swipeDismissState = state)
+            },
+            dismissContent = {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
+                        .heightIn(min = 100.dp, max = 250.dp),
+                    shape = RoundedCornerShape(15.dp),
+                    colors = CardDefaults.cardColors(containerColor = secondary2)
+                ) {
+                    content(item)
+                }
+            },
+            directions = setOf(DismissDirection.EndToStart)
+        )
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DeleteBackground(swipeDismissState: DismissState) {
+    val color = if (swipeDismissState.dismissDirection == DismissDirection.EndToStart) {
+        Color.Red
+    } else secondary2
+
+    Card(modifier = Modifier.fillMaxSize(),
+        colors = CardDefaults.cardColors(
+            containerColor = color
+        ), shape = RoundedCornerShape(15.dp))
+    {
+        Box(modifier = Modifier.fillMaxSize().padding(end = 20.dp),
+            contentAlignment = Alignment.CenterEnd) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Swipe delete icon",
+                tint = Color.White,
+                modifier = Modifier.align(Alignment.CenterEnd)
+            )
+        }
     }
 }
